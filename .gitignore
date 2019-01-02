@@ -1,0 +1,5 @@
+*.pyc
+MANIFEST
+build
+redash_query_download.egg-info
+dist
