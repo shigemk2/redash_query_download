@@ -4,11 +4,11 @@ import click
 import pandas as pd
 from redash_dynamic_query import RedashDynamicQuery
 from datetime import datetime
-import ConfigParser
+import configparser
 import os
 
 def get_config(config_path):
-    parser = ConfigParser.RawConfigParser()
+    parser = configparser.RawConfigParser()
     config = os.path.expanduser(config_path)
 
     parser.read([config])
@@ -22,7 +22,7 @@ def get_config(config_path):
 @click.command()
 @click.option('-q', '--query_id', nargs=1, required=True, type=int)
 @click.option('-p', '--parameters', nargs=2, type=(str, str), multiple=True)
-@click.option('-o', '--output', nargs=1, type=str)
+@click.option('-o', '--output', required=True, nargs=1, type=str)
 @click.option('-c', '--config', default='~/.rqdrc', nargs=1, type=str)
 def cmd(query_id, parameters, output, config):
     execute_query(query_id, parameters, output, config)

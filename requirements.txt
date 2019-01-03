@@ -1,0 +1,4 @@
+redash-dynamic-query==1.0.4
+pandas==0.23.4
+click==7.0
+configparser==3.5.0
