@@ -2,6 +2,10 @@
 
 This package provides a unified command line interface to download results in Redash.
 
+## Requirements
+
+Python 3.x
+
 ## Installation
 
 ```sh
