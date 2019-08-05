@@ -25,13 +25,18 @@ def get_config(config_path):
 @click.option('-o', '--output', required=True, nargs=1, type=str)
 @click.option('-c', '--config', default='~/.rqdrc', nargs=1, type=str)
 @click.option('-d', '--download_only', is_flag=True)
-def cmd(query_id, parameters, output, config, download_only):
+@click.option('-i', '--ignore-error', is_flag=True)
+def cmd(query_id, parameters, output, config, download_only, ignore_error):
     if download_only == True:
-        download_query(query_id, output, config)
+        download_query(query_id, output, config, ignore_error)
     else:
-        execute_query(query_id, parameters, output, config)
+        execute_query(query_id, parameters, output, config, ignore_error)
 
-def execute_query(query_id, parameters, output, config):
+def execute_query(query_id, parameters, output, config, ignore_error=True):
+    if ignore_error == True:
+        error = "ignore"
+    else:
+        error = "strict"
     query_paremters = {}
     for key, value in parameters:
         query_paremters[key] = value
@@ -58,9 +63,15 @@ def execute_query(query_id, parameters, output, config):
     data = result['query_result']['data']
     columns = [column['name'] for column in data['columns']]
     query_df = pd.DataFrame(data['rows'], columns=columns)
-    query_df.to_csv(output, mode='w', index=False, header=True, encoding=encoding)
+    with open(output, mode="w", encoding=encoding, errors=error) as f:
+        query_df.to_csv(f, index=False, header=True)
 
-def download_query(query_id, output, config):
+def download_query(query_id, output, config, ignore_error=True):
+    if ignore_error == True:
+        error = "ignore"
+    else:
+        error = "strict"
+
     cfg = get_config(config)
     encoding = 'utf-8'
     if('redash.encoding' in cfg):
@@ -81,7 +92,8 @@ def download_query(query_id, output, config):
     data = result['query_result']['data']
     columns = [column['name'] for column in data['columns']]
     query_df = pd.DataFrame(data['rows'], columns=columns)
-    query_df.to_csv(output, mode='w', index=False, header=True, encoding=encoding)
+    with open(output, mode="w", encoding=encoding, errors=error) as f:
+        query_df.to_csv(f, index=False, header=True)
 
 def main():
     cmd()

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="redash_query_download",
-    version="0.0.4",
+    version="0.0.5",
     author="Michihito Shigemura",
     author_email="i.am.shige@gmail.com",
     description="redash query download client",
